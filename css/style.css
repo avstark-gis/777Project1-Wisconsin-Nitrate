@@ -58,7 +58,7 @@ display:-ms-inline-grid;
 
 /* Set gray background color and 100% height */
 .sidenav {
-background-image: url('/img/water.png');
+background-image: url('lib/leaflet/images/water.png');
 /*background-color: #f1f1f1;*/
 height: 750px; /*was550*/
 padding-top:8px;
