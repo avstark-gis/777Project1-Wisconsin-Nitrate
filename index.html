@@ -54,26 +54,38 @@
   
   <!--OverRide the Leaflet Css Styles -->
   <style> 
-
-  /*control for layers*/
-  .leaflet-touch .leaflet-control-layers {
+  /*style background of all the controls*/
+  .leaflet-control {
     background-image: url("lib/leaflet/images/waterLt.png");
+    /*background-color: rgb(201, 210, 211);*/
   }
-   /*This is the home button image*/
+  /*This is the home button image*/
   .leaflet-touch .leaflet-bar a:last-child {
-  background-color: rgba(151, 202, 232, .85);
-  /*background-image: url("lib/leaflet/images/home-15.jpg");*/
-  background-image: url("lib/leaflet/images/homeButton2.png");
-  }
-  .leaflet-touch .leaflet-bar a:last-child a:hover {
-    background-color: #f4f4f4;
+    background-image: url("lib/leaflet/images/homeButton2.png");
   }
   /*pop-up on load*/
   .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background-image: url("lib/leaflet/images/water.png");
-    box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-    
+  .leaflet-popup-tip {
+    background-image: url("lib/leaflet/images/water.png");
+    box-shadow: 0 3px 14px rgba(0,0,0,0.4);  
+  }
+  /*This is the reset the map link button*/
+  .leaflet-bar button {
+    /*background-color: rgb(151, 202, 232);*/
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    display: block;
+    background-image: url("lib/leaflet/images/reset2Button.png");
+  }
+  
+  /*
+  control for layers
+  .leaflet-touch .leaflet-control-layers {
+    background-image: url("lib/leaflet/images/waterLt.png");
+  }
+  .leaflet-touch .leaflet-bar a:last-child a:hover {
+    background-color: #f4f4f4;
   }
   .leaflet-touch .leaflet-bar a { 
     background-color: rgba(126, 187, 224, .85);
@@ -81,20 +93,7 @@
   .leaflet-bar a, .leaflet-bar a:hover {
     background-color: #f4f4f4;
   }
-  /*This is the reset the map link button*/
-  .leaflet-bar button {
-    background-color: rgb(151, 202, 232);
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    overflow: hidden;
-    display: block;
-    background-image: url("lib/leaflet/images/reset2Button.png");
-  }
-  .input {
-      width: 500px;
-      color: crimson;
-      opacity: 100%;
-  }
+ */
   
   </style>
   </head>
