@@ -9,15 +9,6 @@ html, body {
     height: 100%;
 }
 
-#chartHeader {
-padding: 12px;
-font-size: 8px; 
-color: white;
-background-color: slategrey;
-box-shadow: 0 0 15px rgba(0,0,0,0.2); 
-border-radius: 1px;   
-}
-
 #canvasChart{
 background-color: whitesmoke;
 /*margin:5px;*/
@@ -59,7 +50,7 @@ display: flex;
 
 /* Set gray background color and 100% height */
 .sidenav {
-background-image: url('img/water.png');
+background-image: url('img/waterLt.png');
 /*background-color: #f1f1f1;*/
 height: 750px; /*was550*/
 padding-top:8px;
@@ -88,6 +79,7 @@ padding: 15px;
 padding:8px 11px; 
 font: 12px/18px; 
 background-color: slategrey;
+background-color: rgb(141, 154, 166);
 box-shadow: 0 0 15px rgba(0,0,0,0.2); 
 border-radius: 5px; 
 } 
@@ -109,6 +101,7 @@ text-align: left;
 line-height: 17px; 
 color: #fff;
 background-color: slategrey;
+background-color: rgb(141, 154, 166);
 }
 
 .legend i { 
@@ -118,6 +111,7 @@ float: left;
 margin-right: 8px; 
 opacity: 0.7; 
 background-color: slategrey;
+background-color: rgb(141, 154, 166);
 }
 
 .leaflet-top, .leaflet-right{

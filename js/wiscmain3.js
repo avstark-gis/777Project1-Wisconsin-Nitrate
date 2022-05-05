@@ -1,3 +1,4 @@
+
 //wiscmain 05/02
 
 //Global Var
@@ -383,6 +384,7 @@ let pointsIDWFeature = turf.featureCollection(pointsIDW);
 //collect layers for idw point to polygon || 
 //the featureCollection.collection is []  .map can only take []
 let collectedIdwValues = turf.collect(polyFeature.features, pointsIDWFeature.features, 'nitr_ran','idwValues');
+
 //featureEach to Centroid   ||  Sum idw points --> centroid --> feature
 let sumArray = [];
 let testArray =[];
@@ -395,30 +397,27 @@ turf.featureEach(collectedIdwValues, function(currentFeature, featureIndex) {
         for (var i = 0; i< currentFeature.properties.idwValues.length; i++) {
             sum += currentFeature.properties.idwValues[i];
             counts = currentFeature.properties.idwValues.length;
-            let meanValue = Number((sum / counts).toFixed(2));  //change to fix the NaN values?
-            //test 
-            //test = currentFeature.properties.idwValues[i];
-            //testArray.push(test);
+            let meanValue = Number((sum / counts).toFixed(2));  
             centroidIdw.properties = {IdwPoint:meanValue};
         }
-    
-    sumArray.push(centroidIdw);
-        
+    sumArray.push(centroidIdw);   
     }
 });
 sumArrayFeature = turf.featureCollection(sumArray);
 
 //collect the cancerFeature and IDWsum from sumArrayFeature YAY!  ---> Feature
 let collectedIdwCanValues = turf.collect(cancerFeature.features, sumArrayFeature, 'IdwPoint', 'idwNitrateMean');
+console.log("This is Dream Collect:");console.log(collectedIdwCanValues);
 
-console.log("This is Dream Collect 1:");console.log(collectedIdwCanValues);
 //=========== end TURF ===============
+
 //======== Get [X,Y] for regression.js and chart.js
 let arrayCanrate =[];
 for ( var i in collectedIdwCanValues.features) {
     values = (Number(collectedIdwCanValues.features[i].properties.canrate));
     arrayCanrate.push(values);
 }
+
 let arrayIdw = [];
 for ( var i in collectedIdwCanValues.features) {
     //this is where to put NaN ? 0 : i 
@@ -427,57 +426,73 @@ for ( var i in collectedIdwCanValues.features) {
     //console.log("test");   console.log(values0); console.count();
     arrayIdw.push(values0);    
 }
+
 let regressionArray =[];
-let xyPairs = [];
+let xyPairs = []; 
 for (var i=0; i <arrayCanrate.length; i++) {
     x = arrayCanrate[i];
     y = arrayIdw[i];
-    regressionArray[i] = [x,y];
+    regressionArray[i] = [x,y]; // VS: valuePairs = [x,y]; regressionArray.push(valuePairs);
     let json = {x:Number(x), y:Number(y)};
     xyPairs.push(json);
-    //valuePairs = [x,y];
-    //regressionArray.push(valuePairs);
-    
 }
 
 //=========== Regression ============
 let regressionResult = regression.linear(regressionArray);
-let ssRegression = ss.linearRegression(regressionArray);
-let equation = regressionResult.string;
+const equation = regressionResult.string;
 const gradient = regressionResult.equation[0];
 const yIntercept = regressionResult.equation[1];
-console.log("==================================")
-console.log("ssRegression");console.log(ssRegression);
-console.log("this is regression.js");console.log(regressionResult);
-console.log(regressionResult.string);
-console.log(gradient);
-console.log(yIntercept);
+const regressionPoints = regressionResult.points;
+
+
+console.log("=========regression.js results commented out==========")
+//console.log("this is regression.js");console.log(regressionResult);
+//console.log("regression points"); console.log(regressionPoints);
+//console.log(regressionResult.string);
+//console.log(gradient);
+//console.log(yIntercept);
+
 
 //========== Chart ===================
 const ctx = document.getElementById('myChart').getContext('2d');
-        
-if (myChart) myChart.destroy(); // https://stackoverflow.com/questions/40056555/destroy-chart-js-bar-graph-to-redraw-other-graph-in-same-canvas
+if (myChart) myChart.destroy();
 myChart = new Chart(ctx, {
     type: 'scatter',
     data: {
-        //labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: 'X Axis = Cancer Rates  | Y Axis = IDW Avg Nitrate Levels',
-            data: xyPairs,     
+      datasets: [{
+            label: '[x,y] = Cancer Rate, IDW Avg',
+            data: xyPairs,
             backgroundColor: [
-            'rgb(255, 99, 132)'
-            ],
-        }]
+                'rgb(65, 174, 118)'
+                ],
+          }, {
+            label: 'Regression Line',
+            data: regressionPoints, 
+            backgroundColor: [
+                'rgb(227, 74, 51)'
+                ],
+          }, {
+            // Changes this dataset to become a line
+            type: 'line',
+          }],
     },
     options: {
-        scales: {
-        x: {
-            type: 'linear',
-            position: 'bottom'
-        } 
-    }   
-    }  
+        responsive: true,
+        
+        plugins: {
+            skipNull: true,
+            title: {
+              display: true,
+              text: 'X Axis = Cancer Rates  |  Y Axis = IDW Avg Nitrate Levels'
+            }
+        }       
+    } 
 });
+
+// ======== Equation display ==========
+document.getElementById('equation').innerHTML = equation;
+
+
 //========= Add data layers and Style the layers ==========
 let canIdwjson = new L.geoJson(collectedIdwCanValues, {
 style: styleLayer,  
@@ -508,6 +523,7 @@ newVal = Number($('input').val());
 console.log(typeof newVal + "" + newVal);
 processInput(newVal);
 updateMap(newVal);
+
 })
 
 
