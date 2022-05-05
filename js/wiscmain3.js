@@ -33,12 +33,17 @@ if (isNaN(newVal)){
 var mapboxAtt = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+
 mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGFuY2VsYXphcnRlIiwiYSI6ImNrcDIyZHN4bzAzZTEydm8yc24zeHNodTcifQ.ydwAELOsAYya_MiJNar3ow';
+
 var map = L.map('map', {
-zoomControl: false
+zoomControl: false,
+scrollWheelZoom: false,
 });
 map.setView([44.605, -89.865], 6.5);
+
 var mapboxmap = L.tileLayer(mapboxUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mapboxAtt}).addTo(map);
+
 //============ Zoom Home =============
 L.Control.zoomHome = L.Control.extend({
 options: {
@@ -106,7 +111,6 @@ zoomHome.addTo(map);
 //-----end Zoom Home
 
 //=======Reset the Map=======
-
 let resetMap = L.easyButton({
 states: [{
     stateName: 'reset',
@@ -131,7 +135,6 @@ var otherLayers = {
 "Well Points": pointjson
 };
 
-
 let cancerGeojson = L.geoJson(cancerTract, {
 style: styleLayer,
 onEachFeature: onEachFeature
@@ -153,44 +156,9 @@ autoClose: true
 // Set the basemap and add other layers to the control 
 L.control.layers(null, otherLayers, { collapsed: false }).addTo(map);
 
-// Leaflet control to show info on hover
-var info = L.control({position:'bottomright'});
-info.onAdd = function (map) {  //map
-this._div = L.DomUtil.create('div', 'info');
-this.update();
-return this._div;
-};
-info.update = function (props) {
-this._div.innerHTML = '<h4>Cancer Rate</h4>' + '<h5>' +  (props ?
-    '<b>' + props.canrate +  '</b><br/>' 
-    : 'Hover Over A Census Tract') +'</h5>';
-};
-//info.addTo(map);
+// ++++ Took out the control for Hover info, Legend and moved to before update map ++++
 
-//Leaflet control Legend
-var legend = L.control({position: 'bottomleft'});
-
-/* //Initial load of the Legend  
-legend.onAdd = function (map) {
-var legdiv = L.DomUtil.create('div', 'info legend'),
-            //grades = [0, .05, .10, .15, .20, .25, .30, .35, .40, .45, .50],
-            grades = [0, .10, .20, .30, .40, .50, .60],
-            labels = [],
-            from;// to
-    for (var i = 0; i < grades.length; i++) {
-            from = grades[i];  
-            to = grades[i + 1];  
-            //Change to getColorResults(from) for a boolen
-            labels.push(
-                '<i style="background:' + getColorCan(from + .01) + '"></i> ' +
-                from + (to ?  ' ' + 'to' + ' ' + to + '% ' : '+ %'));
-        }
-    legdiv.innerHTML = labels.join('<br>');
-        return legdiv;
-};
-*/
-
-//The Leaflet Control and Options for the Dropdown 
+// The Leaflet Control and Options for the Dropdown 
 var attDD = L.control({position: 'topright'});
 attDD.onAdd = function (map) {
 var attdiv = L.DomUtil.create('div', 'info attDD');
@@ -201,8 +169,7 @@ var attdiv = L.DomUtil.create('div', 'info attDD');
         
 attDD.addTo(map);
 
-//Optional leaflet custom control to display info -- submit k info?
-//Colors for styleLayer()
+// Colors for styleLayer()
 function getColorCan(d) {
     return  d >=.60 ? '#6e0150' :   //purple
             d > .50 ? '#720000' :   // u of m + 
@@ -225,147 +192,161 @@ function getColorIdw(d) {
             '#eeefee';  //map grey 
 }
 
-//----Style for layers
+// Style for layers
 function styleLayer(feature) {
-if(attSel == "canrate"){
-    var color = getColorCan(feature.properties[attSel])// .canrate
-    }
-if(attSel == "idwNitrateMean"){
-    var color = getColorIdw(feature.properties[attSel])// .idwNitrateMean   |   attSel
-    }
-    
-return {
-    weight: .4,
-    opacity: 1,
-    color: 'grey', //black
-    dashArray: '0',
-    fillOpacity: 20,
-    fillColor: color
-};
-
+    if(attSel == "canrate"){
+        var color = getColorCan(feature.properties[attSel])// .canrate
+        }
+    if(attSel == "idwNitrateMean"){
+        var color = getColorIdw(feature.properties[attSel])// .idwNitrateMean   |   attSel
+        }
+        
+    return {
+        weight: .4,
+        opacity: 1,
+        color: 'grey', //black
+        dashArray: '0',
+        fillOpacity: 20,
+        fillColor: color
+    };
 }
 function highlightFeature(e) {
-var layer = e.target;
-//Took out the Highlight Style -- just show info on Hover
-if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-    layer.bringToFront();
-}
+    var layer = e.target;
+    //Took out the Highlight Style -- just show info on Hover
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
 info.update(layer.feature.properties); 
 }
 function resetHighlight(e) {
-info.update();
+    info.update();
 }
 function zoomToFeature(e) {
-map.fitBounds(e.target.getBounds());  
+    map.fitBounds(e.target.getBounds());  
 }
 function onEachFeature(feature, layer) {
-layer.on({
-    mouseover: highlightFeature,  
-    mouseout: resetHighlight, 
-    click: zoomToFeature        
-});
+    layer.on({
+        mouseover: highlightFeature,  
+        mouseout: resetHighlight, 
+        click: zoomToFeature        
+    });
 }
 
 //======== Update the Map Object  ============
 
+// Leaflet control Legend
+var legend = L.control({position: 'bottomleft'});
+
+// Info Window for hover information
+var info = L.control({position:'bottomright'});
+    info.onAdd = function (map) {  //map
+    this._div = L.DomUtil.create('div', 'info');
+    this.update();
+    return this._div;
+    };
+    info.update = function (props) {
+        this._div.innerHTML = '<h4>Cancer Rate</h4>' + '<h5>' +  (props ?
+            '<b>' + props.canrate +  '</b><br/>' 
+            : 'Hover Over A Census Tract') +'</h5>';
+    };
+//////////////////////
 function updateMap(){
-console.log("Start updateMap");
+    console.log("Start updateMap");
 
-map.removeLayer(wiscGeojson);  //this was added to remove the Grey on load
+    map.removeLayer(wiscGeojson);  //this was added to remove the Grey on load
 
-var findLayers = new L.layerGroup();
-map.eachLayer(function(layer){   
-    
-    findLayers.addLayer(layer); 
-
-    if(layer.feature && layer.feature.properties[attSel]){  
-        if(attSel == "canrate"){
-            legend.onAdd = function (map) {
-                var legdiv = L.DomUtil.create('div', 'info legend'),
-                            grades = [0, .10, .20, .30, .40, .50, .60],
-                            labels = [],
-                            from, to ;// to
-
-                        for (var i = 0; i < grades.length; i++) {
-                            from = grades[i];  
-                            to = grades[i + 1];  
-                            //Change to getColorResults(from) for a boolen
-                            labels.push(
-                                '<i style="background:' + getColorCan(from + .01) + '"></i> ' +
-                                from + (to ?  ' ' + 'to' + ' ' + to + '% ' : '+ %'));
-                        }
-                    legdiv.innerHTML = labels.join('<br>');
-                        return legdiv;
-            };
+    var findLayers = new L.layerGroup();
+    map.eachLayer(function(layer){   
         
-            info.update = function (props) { 
-            this._div.innerHTML = '<h4>Average Cancer Rate</h4>' + '<h5>' +  (props?
-                '<b>' + props.canrate +  '</b><br/>' 
-                : 'Hover Over A Census Tract') +'</h5>';
-            };
-            info.remove();
-            info.addTo(map)
-
-            var color = getColorCan(layer.feature.properties.canrate); //this needs to be .canrate 
-        //end of cancer rate   
-        } 
+        findLayers.addLayer(layer); 
         
-        if(attSel == 'idwNitrateMean'){
-            legend.onAdd = function (map) {
+        if(layer.feature && layer.feature.properties[attSel]){  
+            if(attSel == "canrate"){
+                legend.onAdd = function (map) {
                     var legdiv = L.DomUtil.create('div', 'info legend'),
-                        grades = [-1, 0, 1, 2, 3, 5, 7],
-                        labels = [],
-                        from, to; //from,
+                                grades = [0, .10, .20, .30, .40, .50, .60],
+                                labels = [],
+                                from, to ;// to
 
-                    for (var i = -1; i < grades.length; i++) {   //
-                        from = grades[i] ;
-                        to = grades[i + 1]; //-1
-                        labels.push(
-                            '<i style="background:' + getColorIdw(from + 1) + '"></i> ' + 
-                            //from + (to ? '%'+'to' + to + '%' : '% or less'));
-                            //from +'  '+ (to ? 'to  ' + to  : ' '));
-                            from);
-                        }
+                            for (var i = 0; i < grades.length; i++) {
+                                from = grades[i];  
+                                to = grades[i + 1];  
+                                //Change to getColorResults(from) for a boolen
+                                labels.push(
+                                    '<i style="background:' + getColorCan(from + .01) + '"></i> ' +
+                                    from + (to ?  ' ' + 'to' + ' ' + to + '% ' : '+ %'));
+                            }
                         legdiv.innerHTML = labels.join('<br>');
-                        return legdiv;
-                        };
-            info.update = function (props) {
-            this._div.innerHTML = '<h4>IDW Average</h4>' + '<h5>' +  (props ?
-                '<b>' + props.idwNitrateMean +  '</b><br/>' 
-                : 'Hover Over A Census Tract') +'</h5>';
-            };
-            info.remove();
-            info.addTo(map)
+                            return legdiv;
+                };
             
-            var color = getColorIdw(layer.feature.properties.idwNitrateMean); //needs to be idwNitrateMean
-        } //end idw values
-            
-        //TODO remove the infowindow
-            legend.remove();
-            legend.addTo(map);
-            var options = {
-                weight: .4,
-                opacity: 1,
-                color: 'grey', //black
-                dashArray: '0',
-                fillOpacity: 20,
-                fillColor: color
-        };
-        
-        layer.setStyle(options);
-        
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight,
-            click: zoomToFeature
-        });
-        
-        layer.redraw();
-        layer.addTo(map);
+                info.update = function (props) { 
+                this._div.innerHTML = '<h4>Average Cancer Rate</h4>' + '<h5>' +  (props?
+                    '<b>' + props.canrate +  '</b><br/>' 
+                    : 'Hover Over A Census Tract') +'</h5>';
+                };
+                info.remove();
+                info.addTo(map)
 
-    }; //if attSel
-    console.log("this is the end up Update Map");
-}); //end map each layer call back
+                var color = getColorCan(layer.feature.properties.canrate); //this needs to be .canrate 
+            //end of cancer rate   
+            } 
+            
+            if(attSel == 'idwNitrateMean'){
+                legend.onAdd = function (map) {
+                        var legdiv = L.DomUtil.create('div', 'info legend'),
+                            grades = [-1, 0, 1, 2, 3, 5, 7],
+                            labels = [],
+                            from, to; //from,
+
+                        for (var i = -1; i < grades.length; i++) {   //
+                            from = grades[i] ;
+                            to = grades[i + 1]; //-1
+                            labels.push(
+                                '<i style="background:' + getColorIdw(from + 1) + '"></i> ' + 
+                                //from + (to ? '%'+'to' + to + '%' : '% or less'));
+                                //from +'  '+ (to ? 'to  ' + to  : ' '));
+                                from);
+                            }
+                            legdiv.innerHTML = labels.join('<br>');
+                            return legdiv;
+                            };
+                info.update = function (props) {
+                this._div.innerHTML = '<h4>IDW Average</h4>' + '<h5>' +  (props ?
+                    '<b>' + props.idwNitrateMean +  '</b><br/>' 
+                    : 'Hover Over A Census Tract') +'</h5>';
+                };
+                info.remove();
+                info.addTo(map)
+                
+                var color = getColorIdw(layer.feature.properties.idwNitrateMean); //needs to be idwNitrateMean
+            } //end idw values
+
+                legend.remove();
+                legend.addTo(map);
+                var options = {
+                    weight: .4,
+                    opacity: 1,
+                    color: 'grey', //black
+                    dashArray: '0',
+                    fillOpacity: 20,
+                    fillColor: color
+            };
+            
+            layer.setStyle(options);
+            
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+            
+            layer.redraw();
+            layer.addTo(map);
+
+        }; //if attSel
+        console.log("this is the end up Update Map");
+    }); //end map each layer call back
 }; //end update map
 
 console.log("This is above turf"); 
@@ -373,21 +354,24 @@ console.log("This is above turf");
 //========== TURF =============
 let myChart;
 function useKvalue (newVal) {
+
 // Set initial featureCollections 
 let pointsFeature = turf.featureCollection(wellArray);
 let cancerFeature = turf.featureCollection(cancerTract);
 let polyFeature = turf.featureCollection(tractPoly);
+
 //interpolate --> feature
 let optionsIDW = {gridType: 'points', property: 'nitr_ran', units: 'miles', weight: newVal}; //newVal for weight
 let pointsIDW = turf.interpolate(pointsFeature, 12, optionsIDW); //12 
 let pointsIDWFeature = turf.featureCollection(pointsIDW);
+
 //collect layers for idw point to polygon || 
 //the featureCollection.collection is []  .map can only take []
 let collectedIdwValues = turf.collect(polyFeature.features, pointsIDWFeature.features, 'nitr_ran','idwValues');
 
 //featureEach to Centroid   ||  Sum idw points --> centroid --> feature
 let sumArray = [];
-let testArray =[];
+
 turf.featureEach(collectedIdwValues, function(currentFeature, featureIndex) {
     if (currentFeature.properties.idwValues >= -10) {
         let sum =0;
@@ -409,7 +393,7 @@ sumArrayFeature = turf.featureCollection(sumArray);
 let collectedIdwCanValues = turf.collect(cancerFeature.features, sumArrayFeature, 'IdwPoint', 'idwNitrateMean');
 console.log("This is Dream Collect:");console.log(collectedIdwCanValues);
 
-//=========== end TURF ===============
+//------- end TURF -------
 
 //======== Get [X,Y] for regression.js and chart.js
 let arrayCanrate =[];
@@ -446,10 +430,10 @@ const regressionPoints = regressionResult.points;
 
 
 console.log("=========regression.js results commented out==========")
-//console.log("this is regression.js");console.log(regressionResult);
+console.log("this is regression.js");console.log(regressionResult);
 //console.log("regression points"); console.log(regressionPoints);
 //console.log(regressionResult.string);
-//console.log(gradient);
+console.log("gradient");console.log(gradient);
 //console.log(yIntercept);
 
 
@@ -463,13 +447,13 @@ myChart = new Chart(ctx, {
             label: '[x,y] = Cancer Rate, IDW Avg',
             data: xyPairs,
             backgroundColor: [
-                'rgb(65, 174, 118)'
+                'rgb(35, 132, 67)'
                 ],
           }, {
             label: 'Regression Line',
             data: regressionPoints, 
             backgroundColor: [
-                'rgb(227, 74, 51)'
+                'rgb(80, 80, 80)'
                 ],
           }, {
             // Changes this dataset to become a line
@@ -490,8 +474,8 @@ myChart = new Chart(ctx, {
 });
 
 // ======== Equation display ==========
-document.getElementById('equation').innerHTML = equation;
-
+document.getElementById('equation').innerHTML = '<p style="color: rgb(42,42,42);"><b>y = mx + c</b></p>' + 
+'<p style="font-size: 20px;">Where <b>m = gradient</b> and<b> c = yIntercept</b></p>' + equation + '<br/>';
 
 //========= Add data layers and Style the layers ==========
 let canIdwjson = new L.geoJson(collectedIdwCanValues, {

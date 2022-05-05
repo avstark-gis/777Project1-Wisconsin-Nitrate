@@ -55,7 +55,7 @@
   <!--OverRide the Leaflet Css Styles -->
   <style> 
   /*style background of all the controls*/
-  .leaflet-control {
+  .leaflet-control,  .leaflet-control-layers{
     background-image: url("lib/leaflet/images/waterLt.png");
     /*background-color: rgb(201, 210, 211);*/
   }
@@ -78,27 +78,11 @@
     display: block;
     background-image: url("lib/leaflet/images/reset2Button.png");
   }
-  
-  /*
-  control for layers
-  .leaflet-touch .leaflet-control-layers {
-    background-image: url("lib/leaflet/images/waterLt.png");
-  }
-  .leaflet-touch .leaflet-bar a:last-child a:hover {
-    background-color: #f4f4f4;
-  }
-  .leaflet-touch .leaflet-bar a { 
-    background-color: rgba(126, 187, 224, .85);
-  }
-  .leaflet-bar a, .leaflet-bar a:hover {
-    background-color: #f4f4f4;
-  }
- */
-  
   </style>
-  </head>
-  <body>
   
+  </head>
+  <!-------------->
+  <body>
   
   <div class="container-fluid">
     
@@ -120,11 +104,14 @@
         <h2 class= "wisctitle" style="font-weight: bold">TITLE: Wisconsin Nitrate Levels in Well Locations and Cancer Rates</h2>
             <p  style="font-size: 14px"> Information about interpolation values. Cancer rates...  </p>
             <div id="canvasChart">
+              <p id = "chartPlaceholder">Scatter Plot and Regression Line</p>
             <canvas id="myChart" width= "400" height= "300"></canvas>
             </div>
             <h4 class="wiscinfo" style="font-weight: bold"> HEADER text: The map to the left shows the final results of IDW interpolation based on user input for k value</h4>
             <div id ="equation">
-            <p>Placeholder for paragrpah </p>
+            <p>Regression Equation</p>
+            <p><b>y = mx + c</b></p>
+            <p style="font-size: 20px;">Where <b>m = gradient</b> and<b> c = yIntercept</b></p>
             </div>
       
        </div>
@@ -132,22 +119,12 @@
   
   </div>
   
-  <!--TEST FOR CHART <div class="container-fluid">
-    <div class="row content">
-      <div class="col-lg-12" id="chartColumn">
-        
-        <header class="container-fluid" id="chartHeader"></header>
-        CHART
-        <canvas id="myChart" width= "400" height= "200"></canvas>
-        EndChart
-      </div>
-    </div>
-  </div>-->
-  
   <script type="text/javascript" src="js/wiscmain3.js"></script>
+  
   <footer class="container-fluid">
     <p>Created By: <a href="https://avstark-gis.github.io/avstark-gis-572Portfolio/" target="_blank">Alissa Stark</a>
   </footer>
+  
   </body>
   </html>
   
