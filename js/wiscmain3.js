@@ -131,18 +131,28 @@ let cancerGeojson = L.geoJson(cancerTract, {
 style: styleLayer,
 onEachFeature: onEachFeature
 }).addTo(map); //uncomment addTo
-
+//--this doesn't work, but made everything grey and that's ok too
 imageURL = "img/waterLG.png";
 let wiscGeojson = L.geoJson(wiscBoundary, {
 style: {color: 'black', weight: '.7', fill: imageURL}//fillOpacity: 0
 }).addTo(map);
 
+var contents = ""; 
+contents += '<div id="description">';
+contents += '<p><span style="font-size: 16px;"><b>To Explore Correlation Between Cancer Rates and Nitrates: </b></span> Please enter a distance exponent <b>k</b> value at the top of the screen (1-3 is best).<br/>';
+contents += '<span style="color: crimson;"><b>Interpolation</b>:</span><br/>This will run a program to interpolate <b>(IDW)</b> the nitrate levels in sample wells,  and create a liner regression model.<br/>';
+contents += '<span style="color: crimson;"><b>Linear Regression</b>:</span><br/>The resulting chart will show the linear correlation between the variables as one of three types:';
+contents += '<img src="lib/leaflet/images/linearScatter.png" height=100>';
+contents += '<span style="color: crimson;"><b>Explore the Data:</span></br></b>In the top-right corner of the map, there are options to click on the well points'+
+' or shift between IDW Nitrate Values and Cancer Rates.<br/>Hover over a location to display details in the lower right of the map.<br/>Displaying the wells is particularily useful after zooming to a location.</p></div>';
+
 var popup = L.popup({
 closeButton: true,
 autoClose: true
 })
-.setLatLng(map.getBounds().getCenter())
-.setContent('<p>This is how you use this</p>')
+//.setLatLng(map.getBounds().getCenter())
+.setLatLng([42.654162,-89.325996])
+.setContent(contents)
 .openOn(map);
 
 // Set the basemap and add other layers to the control 
@@ -153,7 +163,7 @@ L.control.layers(null, otherLayers, { collapsed: false }).addTo(map);
 var attDD = L.control({position: 'topright'});
 attDD.onAdd = function (map) {
 var attdiv = L.DomUtil.create('div', 'info attDD');
-    attdiv.innerHTML = '<h4>Select Attribute</h4><select id="attOpt"><option value = "idwNitrateMean">IDW Average (k)</option><option value = "canrate">Cancer Rate</option></select>';
+    attdiv.innerHTML = '<h4>Select Attribute</h4><select id="attOpt"><option value = "idwNitrateMean">IDW Nitrate Values</option><option value = "canrate">Cancer Rates</option></select>';
     attdiv.firstChild.onmousedown = attdiv.firstChild.ondblclick = L.DomEvent.stopPropagation;
         return attdiv;
         };
