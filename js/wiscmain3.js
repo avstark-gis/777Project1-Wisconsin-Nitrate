@@ -421,6 +421,7 @@ for (var i=0; i <arrayCanrate.length; i++) {
     xyPairs.push(json);
 }
 console.log(xyPairs);
+
 //=========== Regression ============
 let regressionResult = regression.linear(regressionArray);
 const equation = regressionResult.string;
@@ -428,14 +429,9 @@ const gradient = regressionResult.equation[0];
 const yIntercept = regressionResult.equation[1];
 const regressionPoints = regressionResult.points;
 
-/*let yPoints = [];
-const useful_points = regressionResult.points.map(([x, y]) => {  //https://stackoverflow.com/questions/60622195/how-to-draw-a-linear-regression-line-in-chart-js
-    yPoints.push(y);
-})*/
-
 console.log("====== regression.js ======")
 console.log("this is regression.js");console.log(regressionResult);
-//console.log("regression result points"); console.log(regressionPoints);
+
 
 //========== Correlation =============
 console.log("======= Statistics.js =======")
@@ -447,7 +443,7 @@ const useful_points = regressionResult.points.map(([x, y]) => {  //https://stack
     varYArray.push(y);
 })
 //console.log("Test X values");console.log(varXArray);
-console.log("Test Y values");console.log(varYArray);
+console.log("This is Y values statistics.js");console.log(varYArray);
 
 var stats = new Statistics(regressionResult.points);
 var correlation = stats.correlationCoefficient(varXArray,varYArray);
