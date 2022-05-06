@@ -19,7 +19,14 @@ html, body {
 #equation {
     background-color: whitesmoke;  
     font-family: 'Poppins', sans-serif; 
-    font-size: 17;
+    font-size: 15;
+    color: rgb(40, 152, 77);
+    text-align: center;
+}
+#correlation {
+    background-color: whitesmoke;  
+    font-family: 'Poppins', sans-serif; 
+    font-size: 15;
     color: rgb(40, 152, 77);
     text-align: center;
 }
@@ -36,6 +43,7 @@ html, body {
     margin-left: 15px;
     margin-right:15px;
     width: 85%;  /*was 30*/
+
 }   
 #input-box-contents {
     color: rgba(0,0,0,1.0);
@@ -143,8 +151,8 @@ color: rgb(55,55,55);*/
     margin-top: 15px;
 }
 #wiscinfo {
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 8px;
+    margin-bottom: 8px;
     text-align: center;
-    font-size: 23px;
+    font-size: 17px;
 }

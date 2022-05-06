@@ -1,17 +1,10 @@
 
-//wiscmain 05/02
+//wiscmain 05/06
 
 //Global Var
 var map;
 var attSel = 'idwNitrateMean';
-//var attSel = "canrate";//what property will be in drop down options on load 
 var newVals; //k entry
-
-
-//var defaultK = Number(1);
-//var defaultK;
-//var newVal = defaultK;
-
 
 //========= input K =========
 function processInput(newVal){
@@ -208,6 +201,7 @@ function styleLayer(feature) {
         fillColor: color
     };
 }
+
 
 //======== Update the Map Object  ============
 
@@ -416,7 +410,7 @@ for (var i=0; i <arrayCanrate.length; i++) {
     let json = {x:Number(x), y:Number(y)};
     xyPairs.push(json);
 }
-
+console.log(xyPairs);
 //=========== Regression ============
 let regressionResult = regression.linear(regressionArray);
 const equation = regressionResult.string;
@@ -431,7 +425,22 @@ const useful_points = regressionResult.points.map(([x, y]) => {  //https://stack
 
 console.log("====== regression.js ======")
 console.log("this is regression.js");console.log(regressionResult);
+//console.log("regression result points"); console.log(regressionPoints);
 
+//========== Correlation =============
+console.log("======= Statistics.js =======")
+
+let varXArray = [];
+let varYArray = [];
+const useful_points = regressionResult.points.map(([x, y]) => {  //https://stackoverflow.com/questions/60622195/how-to-draw-a-linear-regression-line-in-chart-js
+    varXArray.push(x);
+    varYArray.push(y);
+})
+//console.log("Test X values");console.log(varXArray);
+console.log("Test Y values");console.log(varYArray);
+
+var stats = new Statistics(regressionResult.points);
+var correlation = stats.correlationCoefficient(varXArray,varYArray);
 
 //========== Chart ===================
 console.log("======= Chart.js =======")
@@ -471,8 +480,13 @@ myChart = new Chart(ctx, {
 });
 
 // ======== Equation display ==========
-document.getElementById('equation').innerHTML = '<p><b>y = mx + c</b></p>' + 
-'<p>Where <b>m = gradient</b> and<b> c = yIntercept</b></p>' + '<p style="font-size: 20px; color: rgb(42,42,42);">' + equation + '</p>';
+document.getElementById('equation').innerHTML = '<p>y = mx + c<br/>' + 
+'Where m = gradient and c = yIntercept</p>' + '<p style="font-size: 17px; color: rgb(42,42,42);">' + equation + '</p>';
+
+// ======== Coefficient display ==========
+document.getElementById('correlation').innerHTML = 
+//'<p style="font-size: 15px; color: rgb(42,42,42);">' + correlation.correlationCoefficient + '</p>';
+'<p style="font-size: 17px; color: rgb(42,42,42);">' + correlation.correlationCoefficient + '</p>';
 
 //========= Add data layers and Style the layers ==========
 let canIdwjson = new L.geoJson(collectedIdwCanValues, {
@@ -503,6 +517,4 @@ processInput(newVal);
 updateMap(newVal);
 
 })
-
-
 
