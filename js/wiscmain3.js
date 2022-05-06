@@ -24,7 +24,6 @@ if (isNaN(newVal)){
 } else {
     window.alert("Sending your K Value Now");
     updateMap(newVal);
-    //useKvalueTest(newVal);
     useKvalue(newVal);
 }
 }
@@ -156,8 +155,6 @@ autoClose: true
 // Set the basemap and add other layers to the control 
 L.control.layers(null, otherLayers, { collapsed: false }).addTo(map);
 
-// ++++ Took out the control for Hover info, Legend and moved to before update map ++++
-
 
 // The Leaflet Control and Options for the Dropdown 
 var attDD = L.control({position: 'topright'});
@@ -211,7 +208,7 @@ function styleLayer(feature) {
         fillColor: color
     };
 }
-//++++ moved highlight reset on each feature....
+
 //======== Update the Map Object  ============
 
 // Leaflet control Legend
@@ -247,6 +244,7 @@ var info = L.control({position:'bottomright'});
     }
 //////////////////////
 function updateMap(){
+    console.log("--------- updateMap() ----------")
     console.log("Start updateMap");
 
     map.removeLayer(wiscGeojson);  //this was added to remove the Grey on load
@@ -341,16 +339,17 @@ function updateMap(){
             layer.addTo(map);
 
         }; //if attSel
-        console.log("this is the end up Update Map");
+        console.log("End updateMap");
     }); //end map each layer call back
 }; //end update map
 
-console.log("This is above turf"); 
 
-//========== TURF =============
+//============ TURF/REGRESSION-JS/CHART.JS ========== (one giant function for now)
 let myChart;
 function useKvalue (newVal) {
 
+//------- TURF----------
+console.log("======== Turf.js ========")
 // Set initial featureCollections 
 let pointsFeature = turf.featureCollection(wellArray);
 let cancerFeature = turf.featureCollection(cancerTract);
@@ -387,11 +386,12 @@ sumArrayFeature = turf.featureCollection(sumArray);
 
 //collect the cancerFeature and IDWavg from sumArrayFeature YAY!  ---> Feature
 let collectedIdwCanValues = turf.collect(cancerFeature.features, sumArrayFeature, 'IdwPoint', 'idwNitrateMean');
-console.log("This is Dream Collect:");console.log(collectedIdwCanValues);
+console.log("This Turf final Collect:");console.log(collectedIdwCanValues);
 
 //------- end TURF -------
 
 //======== Get [X,Y] for regression.js and chart.js
+
 let arrayCanrate =[];
 for ( var i in collectedIdwCanValues.features) {
     values = (Number(collectedIdwCanValues.features[i].properties.canrate));
@@ -424,21 +424,17 @@ const gradient = regressionResult.equation[0];
 const yIntercept = regressionResult.equation[1];
 const regressionPoints = regressionResult.points;
 
-let yPoints = [];
+/*let yPoints = [];
 const useful_points = regressionResult.points.map(([x, y]) => {  //https://stackoverflow.com/questions/60622195/how-to-draw-a-linear-regression-line-in-chart-js
     yPoints.push(y);
-})
+})*/
 
-console.log("=========regression.js results commented out==========")
+console.log("====== regression.js ======")
 console.log("this is regression.js");console.log(regressionResult);
-console.log("this is the y points");console.log(yPoints);
-//console.log("regression points"); console.log(regressionPoints);
-//console.log(regressionResult.string);
-//console.log("gradient");console.log(gradient);
-//console.log(yIntercept);
 
 
 //========== Chart ===================
+console.log("======= Chart.js =======")
 const ctx = document.getElementById('myChart').getContext('2d');
 if (myChart) myChart.destroy();
 myChart = new Chart(ctx, {
@@ -484,11 +480,8 @@ style: styleLayer,
 onEachFeature: onEachFeature
 });
 map.addLayer(canIdwjson);
-//updateMap(canIdwjson);  
-
+ 
 }//end useKvalue
-
-console.log("Right before Jquery");
 
 
 // ======== Jquery =========
@@ -501,8 +494,8 @@ updateMap(attSel);
 })
 
 //----change input---------
-
 $('#input-box').change(function(){
+console.log("========= input ========")
 console.log('input has changed');
 newVal = Number($('input').val());
 console.log(typeof newVal + "" + newVal);
