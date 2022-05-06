@@ -65,7 +65,9 @@ html, body {
     height: auto;
     padding-top:8px;
 }
-
+.col-sm-4 {
+    margin-right: 15px;
+}
 /* Set black background color, white text and some padding */
 footer {
     background-color: #555;
@@ -81,6 +83,7 @@ footer {
 .sidenav {
     height: auto;
     padding: 15px;
+    
 }
 .row.content {height: auto;} 
 }

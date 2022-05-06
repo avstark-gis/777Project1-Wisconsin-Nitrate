@@ -211,28 +211,7 @@ function styleLayer(feature) {
         fillColor: color
     };
 }
-function highlightFeature(e) {
-    var layer = e.target;
-    //Took out the Highlight Style -- just show info on Hover
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
-info.update(layer.feature.properties); 
-}
-function resetHighlight(e) {
-    info.update();
-}
-function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());  
-}
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,  
-        mouseout: resetHighlight, 
-        click: zoomToFeature        
-    });
-}
-
+//++++ moved highlight reset on each feature....
 //======== Update the Map Object  ============
 
 // Leaflet control Legend
@@ -245,7 +224,27 @@ var info = L.control({position:'bottomright'});
     this.update();
     return this._div;
     };
-    
+    function highlightFeature(e) {
+        var layer = e.target;
+        //Took out the Highlight Style -- just show info on Hover
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+    info.update(layer.feature.properties); 
+    }
+    function resetHighlight(e) {
+        info.update();
+    }
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());  
+    }
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,  
+            mouseout: resetHighlight, 
+            click: zoomToFeature        
+        });
+    }
 //////////////////////
 function updateMap(){
     console.log("Start updateMap");
@@ -386,7 +385,7 @@ turf.featureEach(collectedIdwValues, function(currentFeature, featureIndex) {
 });
 sumArrayFeature = turf.featureCollection(sumArray);
 
-//collect the cancerFeature and IDWsum from sumArrayFeature YAY!  ---> Feature
+//collect the cancerFeature and IDWavg from sumArrayFeature YAY!  ---> Feature
 let collectedIdwCanValues = turf.collect(cancerFeature.features, sumArrayFeature, 'IdwPoint', 'idwNitrateMean');
 console.log("This is Dream Collect:");console.log(collectedIdwCanValues);
 
@@ -425,12 +424,17 @@ const gradient = regressionResult.equation[0];
 const yIntercept = regressionResult.equation[1];
 const regressionPoints = regressionResult.points;
 
+let yPoints = [];
+const useful_points = regressionResult.points.map(([x, y]) => {  //https://stackoverflow.com/questions/60622195/how-to-draw-a-linear-regression-line-in-chart-js
+    yPoints.push(y);
+})
 
 console.log("=========regression.js results commented out==========")
 console.log("this is regression.js");console.log(regressionResult);
+console.log("this is the y points");console.log(yPoints);
 //console.log("regression points"); console.log(regressionPoints);
 //console.log(regressionResult.string);
-console.log("gradient");console.log(gradient);
+//console.log("gradient");console.log(gradient);
 //console.log(yIntercept);
 
 
@@ -444,13 +448,13 @@ myChart = new Chart(ctx, {
             label: '[x,y] = Cancer Rate, IDW Avg',
             data: xyPairs,
             backgroundColor: [
-                'rgb(35, 132, 67)'
+                'rgba(35, 132, 67, .5)'
                 ],
           }, {
             label: 'Regression Line',
             data: regressionPoints, 
             backgroundColor: [
-                'rgb(80, 80, 80)'
+                'rgb(55, 55, 55)'
                 ],
           }, {
             // Changes this dataset to become a line
