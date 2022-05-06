@@ -1,7 +1,7 @@
 # Geog777 Project1 Wisconsin Nitrate Levels and Cancer Rates
 
 ## Quick Rundown of Project 1 
-Being given two datasets: the first polygons with the average cancer rates per census tract normalized by population, the second being well points locations with attached nitrate levels.
+Being given two datasets: the first polygons with the average cancer rates per census tract normalized by population, the second being well point locations with attached nitrate levels.
 A third shapefile was added of census tract boundary line polygons.
 
 Turf.js is used to perform various spatial operations.  
