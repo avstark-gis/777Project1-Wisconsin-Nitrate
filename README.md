@@ -1,6 +1,7 @@
 # Geog777 Project1 Wisconsin Nitrate Levels and Cancer Rates
 
 ## Quick Rundown of Project 1 
+## Link to Demo, [YouTube](https://youtu.be/pU16y-DRtuI)
 Being given two datasets: the first polygons with the average cancer rates per census tract normalized by population, the second being well point locations with attached nitrate levels.
 A third shapefile was added of census tract boundary line polygons.
 
