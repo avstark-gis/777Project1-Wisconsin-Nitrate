@@ -15,7 +15,10 @@ html, body {
     /*margin:5px;*/
     /*background-image: url('/img/graph.png');*/
 }
-
+#titleInfo {
+    font-size: 13px;
+    text-align: justify;
+}
 #equation {
     background-color: whitesmoke;  
     font-family: 'Poppins', sans-serif; 

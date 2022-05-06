@@ -79,26 +79,6 @@
     display: block;
     background-image: url("lib/leaflet/images/reset2Button.png");
   }
- /*======== for responsive ========*/
- .row.content {
-    height: 750px;
-}
-.sidenav {
-    background-image: url('img/waterLt.png');
-    height: 750px;
-    padding-top:8px;
-}
- /* On small screens, set height to 'auto' for sidenav and grid */
-@media screen and (max-width: 767px) {
-.sidenav {
-    height: auto;
-    padding: 15px;
-    
-}
-.row.content {height: auto;} 
-.row.content2 {height: auto;}
-}
-
 
   </style>
   
@@ -126,7 +106,11 @@
     
       <div class="col-sm-4 sidenav">
         <h2 class= "wisctitle" style="font-weight: bold">Nitrate Levels in Well Locations<br/>Throughout Wisconsin</br.><br/>and Cancer Rates</h2>
-            <p  style="font-size: 14px"> Information about interpolation values. Cancer rates...  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p  id="titleInfo" style="font-size: 14px"> Turf.js <b>interpolate</b> is used to perform the inverse distance weighted interpolation on the nitrate data from the Well Points. 
+              Turf.js<b>collect</b> is used to join the cancer rate data and the IDW values.
+              This result is displayed as an average IDW value on the map.  
+              Regression.js and Statistics.js are then passed this result to create a linear regression model and correlation coefficient.
+              Chart.js is then passed that model and displays a scatter plot and regression line. </p>
             <div id="canvasChart">
               <p id = "chartPlaceholder">Scatter Plot and Regression Line</p>
               <canvas id="myChart" width= "400" height= "200"></canvas>
