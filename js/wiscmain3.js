@@ -158,6 +158,7 @@ L.control.layers(null, otherLayers, { collapsed: false }).addTo(map);
 
 // ++++ Took out the control for Hover info, Legend and moved to before update map ++++
 
+
 // The Leaflet Control and Options for the Dropdown 
 var attDD = L.control({position: 'topright'});
 attDD.onAdd = function (map) {
@@ -244,11 +245,7 @@ var info = L.control({position:'bottomright'});
     this.update();
     return this._div;
     };
-    info.update = function (props) {
-        this._div.innerHTML = '<h4>Cancer Rate</h4>' + '<h5>' +  (props ?
-            '<b>' + props.canrate +  '</b><br/>' 
-            : 'Hover Over A Census Tract') +'</h5>';
-    };
+    
 //////////////////////
 function updateMap(){
     console.log("Start updateMap");
@@ -474,8 +471,8 @@ myChart = new Chart(ctx, {
 });
 
 // ======== Equation display ==========
-document.getElementById('equation').innerHTML = '<p style="color: rgb(42,42,42);"><b>y = mx + c</b></p>' + 
-'<p style="font-size: 20px;">Where <b>m = gradient</b> and<b> c = yIntercept</b></p>' + equation + '<br/>';
+document.getElementById('equation').innerHTML = '<p><b>y = mx + c</b></p>' + 
+'<p>Where <b>m = gradient</b> and<b> c = yIntercept</b></p>' + '<p style="font-size: 20px; color: rgb(42,42,42);">' + equation + '</p>';
 
 //========= Add data layers and Style the layers ==========
 let canIdwjson = new L.geoJson(collectedIdwCanValues, {
@@ -509,7 +506,6 @@ processInput(newVal);
 updateMap(newVal);
 
 })
-
 
 
 

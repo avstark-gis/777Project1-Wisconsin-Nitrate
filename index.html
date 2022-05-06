@@ -56,7 +56,7 @@
   <style> 
   /*style background of all the controls*/
   .leaflet-control,  .leaflet-control-layers{
-    background-image: url("lib/leaflet/images/waterLt.png");
+    background-image: url("lib/leaflet/images/water.png");
     /*background-color: rgb(201, 210, 211);*/
   }
   /*This is the home button image*/
@@ -78,6 +78,8 @@
     display: block;
     background-image: url("lib/leaflet/images/reset2Button.png");
   }
+ 
+
   </style>
   
   </head>
@@ -90,33 +92,33 @@
       <div class="col-sm-8"><!--<div class="col-sm-4">-->
         <!--<p style="font-size: 25px; display: inline; color: crimson;padding-left: 15px;padding-right: 12px;">Enter Value for K Greater than 1</p>-->
         <div id="input-box">
-          <input id="input-box-contents" type="text" name="input" placeholder="K value and press [Enter]" width=250></input>
+          <input id="input-box-contents" type="text" name="input" placeholder="K value and [Enter]" width=250></input>
         </div>
       </div>
     </div>
-  
+    
     <div class="row content">
       <div class="col-sm-8">
-        <div id='map' style="height:750px"></div>
-      </div>
+        <div id='map' style="height:750px">
+         
+        </div><!--MAP-->
+      </div><!--Col-->
     
       <div class="col-sm-4 sidenav">
-        <h2 class= "wisctitle" style="font-weight: bold">TITLE: Wisconsin Nitrate Levels in Well Locations and Cancer Rates</h2>
-            <p  style="font-size: 14px"> Information about interpolation values. Cancer rates...  </p>
+        <h2 class= "wisctitle" style="font-weight: bold">Nitrate Levels in Well Locations<br/>Throughout Wisconsin</br.><br/>and Cancer Rates</h2>
+            <p  style="font-size: 14px"> Information about interpolation values. Cancer rates...  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <div id="canvasChart">
               <p id = "chartPlaceholder">Scatter Plot and Regression Line</p>
-            <canvas id="myChart" width= "400" height= "300"></canvas>
-            </div>
-            <h4 class="wiscinfo" style="font-weight: bold"> HEADER text: The map to the left shows the final results of IDW interpolation based on user input for k value</h4>
-            <div id ="equation">
-            <p>Regression Equation</p>
-            <p><b>y = mx + c</b></p>
-            <p style="font-size: 20px;">Where <b>m = gradient</b> and<b> c = yIntercept</b></p>
+              <canvas id="myChart" width= "400" height= "200"></canvas>
             </div>
       
-       </div>
-    </div>
-  
+            <h4 id="wiscinfo" style="font-weight: bold">Regression Equation</h4>
+            <div id ="equation">
+            <p style="color:rgb(44,44,44);"><b>y = mx + c</b></p>
+            <p>Where <b>m = gradient</b> and<b> c = yIntercept</b></p>
+            </div>
+    
+      </div>
   </div>
   
   <script type="text/javascript" src="js/wiscmain3.js"></script>
