@@ -130,8 +130,8 @@ var otherLayers = {
 let cancerGeojson = L.geoJson(cancerTract, {
 style: styleLayer,
 onEachFeature: onEachFeature
-}).addTo(map); //uncomment addTo
-//--this doesn't work, but made everything grey and that's ok too
+}).addTo(map); //uncomment addTo  //--this doesn't work, but made everything grey and that's ok too
+
 imageURL = "img/waterLG.png";
 let wiscGeojson = L.geoJson(wiscBoundary, {
 style: {color: 'black', weight: '.7', fill: imageURL}//fillOpacity: 0
