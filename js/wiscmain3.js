@@ -257,6 +257,7 @@ function updateMap(){
     map.eachLayer(function(layer){   
         
         findLayers.addLayer(layer); 
+        // TODO: ?? @end findLayers.removeLayer(layer);  Use this to fix layer reset outside of turf
         
         if(layer.feature && layer.feature.properties[attSel]){  
             if(attSel == "canrate"){
